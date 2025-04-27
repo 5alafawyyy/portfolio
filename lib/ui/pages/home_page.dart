@@ -8,6 +8,7 @@ import 'projects_page.dart';
 import 'experience_page.dart';
 import 'contact_page.dart';
 import 'education_page.dart';
+import 'certificates_page.dart';
 import 'package:rive/rive.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
     '/projects',
     '/experience',
     '/education',
+    '/certificates',
     '/contact',
   ];
 
@@ -36,6 +38,7 @@ class _HomePageState extends State<HomePage> {
     'Projects',
     'Experience',
     'Education',
+    'Certificates',
     'Contact',
   ];
 
@@ -194,6 +197,8 @@ class _HomePageState extends State<HomePage> {
       case 4:
         return const EducationPage();
       case 5:
+        return const CertificatesPage();
+      case 6:
         return const ContactPage();
       default:
         return _mainContent(context, width: width, avatarSize: avatarSize);
@@ -288,6 +293,13 @@ class _HomePageState extends State<HomePage> {
                       ),
                       NavigationRailDestination(
                         icon: Tooltip(
+                          message: 'Certificates',
+                          child: Icon(Icons.workspace_premium),
+                        ),
+                        label: Text('Certificates'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
                           message: 'Contact',
                           child: Icon(Icons.mail),
                         ),
@@ -379,6 +391,13 @@ class _HomePageState extends State<HomePage> {
                       ),
                       NavigationRailDestination(
                         icon: Tooltip(
+                          message: 'Certificates',
+                          child: Icon(Icons.workspace_premium),
+                        ),
+                        label: Text('Certificates'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
                           message: 'Contact',
                           child: Icon(Icons.mail),
                         ),
@@ -463,10 +482,16 @@ class _HomePageState extends State<HomePage> {
                 onTap: () => _onMobileNavTap(4),
               ),
               _DrawerIconButton(
-                icon: Icons.mail,
-                tooltip: 'Contact',
+                icon: Icons.workspace_premium,
+                tooltip: 'Certificates',
                 selected: selectedIndex == 5,
                 onTap: () => _onMobileNavTap(5),
+              ),
+              _DrawerIconButton(
+                icon: Icons.mail,
+                tooltip: 'Contact',
+                selected: selectedIndex == 6,
+                onTap: () => _onMobileNavTap(6),
               ),
             ],
           ),
