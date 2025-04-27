@@ -10,6 +10,7 @@ import 'contact_page.dart';
 import 'education_page.dart';
 import 'certificates_page.dart';
 import 'package:rive/rive.dart';
+import 'package:flutter/material.dart' as material;
 
 class HomePage extends StatefulWidget {
   final VoidCallback onToggleTheme;
@@ -150,6 +151,57 @@ class _HomePageState extends State<HomePage> {
                       .scale(delay: 900.ms),
                 ],
               ),
+              const SizedBox(height: 20),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              _AnimatedShimmerButton(
+                icon: Icons.download,
+                label: 'Download CV',
+                onPressed: () async {
+                  // Replace with your actual CV URL or asset
+                  const cvUrl =
+                      'https://drive.google.com/file/d/1UPxmHswdr0ciFxn1DkmU9edumw0EIi0Y/view?usp=drive_link';
+                  final uri = Uri.parse(cvUrl);
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  }
+                },
+              ),
+              //     const SizedBox(width: 16),
+              //     ElevatedButton.icon(
+              //       icon: const Icon(Icons.visibility),
+              //       label: const Text('View CV'),
+              //       style: ElevatedButton.styleFrom(
+              //         padding: const EdgeInsets.symmetric(
+              //           horizontal: 20,
+              //           vertical: 14,
+              //         ),
+              //         textStyle: const TextStyle(
+              //           fontSize: 16,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //         backgroundColor: Theme.of(context).colorScheme.secondary,
+              //         foregroundColor: Colors.white,
+              //         shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(12),
+              //         ),
+              //       ),
+              //       onPressed: () async {
+              //         // Replace with your actual CV view URL
+              //         const cvViewUrl =
+              //             'https://drive.google.com/file/d/YOUR_CV_FILE_ID/view?usp=sharing';
+              //         final uri = Uri.parse(cvViewUrl);
+              //         if (await canLaunchUrl(uri)) {
+              //           await launchUrl(
+              //             uri,
+              //             mode: LaunchMode.externalApplication,
+              //           );
+              //         }
+              //       },
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -563,6 +615,104 @@ class _DrawerIconButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _AnimatedShimmerButton extends StatefulWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onPressed;
+  const _AnimatedShimmerButton({
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+  });
+
+  @override
+  State<_AnimatedShimmerButton> createState() => _AnimatedShimmerButtonState();
+}
+
+class _AnimatedShimmerButtonState extends State<_AnimatedShimmerButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _shadowAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+    _shadowAnim = Tween<double>(
+      begin: 0,
+      end: 16,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                blurRadius: _shadowAnim.value,
+                spreadRadius: 1,
+              ),
+            ],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ShaderMask(
+            shaderCallback: (Rect bounds) {
+              return material.LinearGradient(
+                colors: [
+                  Colors.white.withOpacity(0.7),
+                  Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                  Colors.white.withOpacity(0.7),
+                ],
+                stops: [0.0, 0.5, 1.0],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                tileMode: TileMode.mirror,
+                transform: GradientRotation(_controller.value * 2 * 3.1416),
+              ).createShader(bounds);
+            },
+            blendMode: BlendMode.srcATop,
+            child: ElevatedButton.icon(
+              icon: Icon(widget.icon),
+              label: Text(widget.label),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 14,
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
+              onPressed: widget.onPressed,
+            ),
+          ),
+        );
+      },
     );
   }
 }
