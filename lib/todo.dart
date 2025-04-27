@@ -38,50 +38,28 @@
 // Tech Stack
 // =============================
 //
-// [ ] Flutter Web with flutter_bloc for state
-// [ ] url_launcher for external links
-// [ ] flutter_animate or rive for micro animations
-// [ ] carousel_slider for showcasing app screenshots
-// [ ] Hosting via Firebase Hosting or GitHub Pages (optional)
+// [x] Flutter Web with flutter_bloc for state
+// [x] url_launcher for external links
+// [x] flutter_animate or rive for micro animations
+// [x] carousel_slider for showcasing app screenshots
+// [x] Hosting via GitHub Pages 
 //
 // =============================
 // What I Can Provide
 // =============================
 //
-// [ ] Full Flutter Web template tailored to your branding
-// [ ] Clean code structure with reusable components
-// [ ] Step-by-step guide to deploy it live
-// [ ] Ongoing tweaks as you want to update content
+// [x] Full Flutter Web template tailored to your branding
+// [x] Clean code structure with reusable components
+// [x] Step-by-step guide to deploy it live
+// [x] Ongoing tweaks as you want to update content
 
+// [x] Connect with github pages to deploy the app live
 
-// [ ] Connect with github pages to deploy the app live
+// [x] Make drawer fixed on the left side of the screen and onhover splash effect and press on it to open it
 
-// [ ] Make drawer fixed on the left side of the screen and onhover splash effect and press on it to open it
-
-// =============================
-// Deployment
-// =============================
-// [ ] Deploy to GitHub Pages
-// [ ] Add deployment instructions to README
-//
-// =============================
-// State Management
-// =============================
-// [ ] Integrate flutter_bloc for form and global state
-//
-// =============================
 // Final Polish
 // =============================
-// [ ] Add micro-animations and final UI tweaks
+// [x] Add micro-animations and final UI tweaks
 
-// =============================
-// Upcoming Refactor & UX Enhancements
-// =============================
-// [ ] Refactor HomePage to a single scrollable page with all sections (Home, About, Projects, Experience, Contact)
-// [ ] Update sidebar/drawer navigation to scroll to sections instead of switching pages
-// [ ] Add 'Show More' button to Projects section for progressive loading
-// [ ] Add bounce/scale on hover for cards and buttons
-// [ ] Add shimmer effect for loading states
-// [ ] Enhance Mocha Mousse palette with gradients/background depth
-// [ ] Improve button feedback, focus, and accessibility
+
 

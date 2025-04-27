@@ -38,7 +38,9 @@ dependencies:
   url_launcher: ^6.3.1
   flutter_animate: ^4.5.2
   carousel_slider: ^5.0.0
-  flutter_bloc: ^9.1.0
+  flutter_bloc: ^8.1.3
+  rive: ^0.12.4
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:
@@ -92,3 +94,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+  assets:
+    - assets/animations/intro.riv

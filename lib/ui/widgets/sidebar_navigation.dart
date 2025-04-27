@@ -66,8 +66,9 @@ class _SidebarNavTile extends StatelessWidget {
               : Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        splashColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-        hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+        splashColor: Theme.of(context).colorScheme.primary.withOpacity(0.25),
+        hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+        highlightColor: Theme.of(context).colorScheme.primary.withOpacity(0.10),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),

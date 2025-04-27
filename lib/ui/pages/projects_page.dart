@@ -4,6 +4,7 @@ import '../../data/data_sources/projects_data.dart';
 import '../widgets/responsive_layout.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProjectsPage extends StatelessWidget {
   const ProjectsPage({Key? key}) : super(key: key);
@@ -86,11 +87,18 @@ class _ProjectCard extends StatelessWidget {
                             .map<Widget>(
                               (img) => ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
-                                child: Image.network(
-                                  img,
+                                child: CachedNetworkImage(
+                                  imageUrl: img,
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   height: 180,
+                                  placeholder:
+                                      (context, url) => Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                  errorWidget:
+                                      (context, url, error) =>
+                                          Icon(Icons.error),
                                 ),
                               ),
                             )

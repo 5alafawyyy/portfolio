@@ -7,6 +7,7 @@ import 'about_page.dart';
 import 'projects_page.dart';
 import 'experience_page.dart';
 import 'contact_page.dart';
+import 'package:rive/rive.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback onToggleTheme;
@@ -47,25 +48,12 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Placeholder for animation
-              Container(
-                    width: avatarSize,
-                    height: avatarSize,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.play_circle_fill,
-                        size: 80,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  )
-                  .animate()
-                  .fadeIn(duration: 600.ms, curve: Curves.easeOut)
-                  .slideY(begin: 0.2, end: 0, duration: 600.ms),
+              // Add Rive animation at the top of the intro
+              SizedBox(
+                width: avatarSize,
+                height: avatarSize,
+                child: RiveAnimation.asset('assets/animations/intro.riv'),
+              ),
               const SizedBox(height: 32),
               AnimatedOpacity(
                 opacity: 1.0,
