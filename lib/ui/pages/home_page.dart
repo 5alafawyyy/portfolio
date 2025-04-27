@@ -39,9 +39,17 @@ class _HomePageState extends State<HomePage> {
     'Contact',
   ];
 
+  // Helper to get the title for the AppBar
+  String get _currentTitle => _titles[selectedIndex];
+
   void _onSidebarNavigate(String route) {
     final idx = _routes.indexOf(route);
     if (idx != -1) setState(() => selectedIndex = idx);
+  }
+
+  void _onMobileNavTap(int idx) {
+    setState(() => selectedIndex = idx);
+    Navigator.of(context).maybePop(); // Closes the drawer if open
   }
 
   Widget _mainContent(
@@ -208,41 +216,88 @@ class _HomePageState extends State<HomePage> {
     return ResponsiveLayout(
       desktop: Row(
         children: [
-          NavigationRail(
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (idx) => setState(() => selectedIndex = idx),
-            labelType: NavigationRailLabelType.none,
-            backgroundColor:
-                Theme.of(context).navigationRailTheme.backgroundColor,
-            destinations: const [
-              NavigationRailDestination(
-                icon: Tooltip(message: 'Home', child: Icon(Icons.home)),
-                label: Text('Home'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(message: 'About Me', child: Icon(Icons.person)),
-                label: Text('About Me'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(message: 'Projects', child: Icon(Icons.apps)),
-                label: Text('Projects'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Experience',
-                  child: Icon(Icons.timeline),
+          Container(
+            width: 80,
+            color: Theme.of(context).navigationRailTheme.backgroundColor,
+            child: Column(
+              children: [
+                const SizedBox(height: 32),
+                // Profile image and name
+                Material(
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 32,
+                        backgroundImage: AssetImage(
+                          'assets/images/ahmedkhallaf.jpg',
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Ahmed Khallaf',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
-                label: Text('Experience'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(message: 'Education', child: Icon(Icons.school)),
-                label: Text('Education'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(message: 'Contact', child: Icon(Icons.mail)),
-                label: Text('Contact'),
-              ),
-            ],
+                const SizedBox(height: 24),
+                Expanded(
+                  child: NavigationRail(
+                    selectedIndex: selectedIndex,
+                    onDestinationSelected:
+                        (idx) => setState(() => selectedIndex = idx),
+                    labelType: NavigationRailLabelType.none,
+                    backgroundColor:
+                        Theme.of(context).navigationRailTheme.backgroundColor,
+                    destinations: const [
+                      NavigationRailDestination(
+                        icon: Tooltip(message: 'Home', child: Icon(Icons.home)),
+                        label: Text('Home'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'About Me',
+                          child: Icon(Icons.person),
+                        ),
+                        label: Text('About Me'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'Projects',
+                          child: Icon(Icons.apps),
+                        ),
+                        label: Text('Projects'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'Experience',
+                          child: Icon(Icons.timeline),
+                        ),
+                        label: Text('Experience'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'Education',
+                          child: Icon(Icons.school),
+                        ),
+                        label: Text('Education'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'Contact',
+                          child: Icon(Icons.mail),
+                        ),
+                        label: Text('Contact'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Scaffold(
@@ -254,41 +309,86 @@ class _HomePageState extends State<HomePage> {
       ),
       tablet: Row(
         children: [
-          NavigationRail(
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (idx) => setState(() => selectedIndex = idx),
-            labelType: NavigationRailLabelType.none,
-            backgroundColor:
-                Theme.of(context).navigationRailTheme.backgroundColor,
-            destinations: const [
-              NavigationRailDestination(
-                icon: Tooltip(message: 'Home', child: Icon(Icons.home)),
-                label: Text('Home'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(message: 'About Me', child: Icon(Icons.person)),
-                label: Text('About Me'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(message: 'Projects', child: Icon(Icons.apps)),
-                label: Text('Projects'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Experience',
-                  child: Icon(Icons.timeline),
+          Container(
+            width: 80,
+            color: Theme.of(context).navigationRailTheme.backgroundColor,
+            child: Column(
+              children: [
+                const SizedBox(height: 32),
+                // Profile image and name
+                Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 32,
+                      backgroundImage: AssetImage(
+                        'assets/images/ahmedkhallaf.png',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Ahmed Khallaf',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-                label: Text('Experience'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(message: 'Education', child: Icon(Icons.school)),
-                label: Text('Education'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(message: 'Contact', child: Icon(Icons.mail)),
-                label: Text('Contact'),
-              ),
-            ],
+                const SizedBox(height: 24),
+                Expanded(
+                  child: NavigationRail(
+                    selectedIndex: selectedIndex,
+                    onDestinationSelected:
+                        (idx) => setState(() => selectedIndex = idx),
+                    labelType: NavigationRailLabelType.none,
+                    backgroundColor:
+                        Theme.of(context).navigationRailTheme.backgroundColor,
+                    destinations: const [
+                      NavigationRailDestination(
+                        icon: Tooltip(message: 'Home', child: Icon(Icons.home)),
+                        label: Text('Home'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'About Me',
+                          child: Icon(Icons.person),
+                        ),
+                        label: Text('About Me'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'Projects',
+                          child: Icon(Icons.apps),
+                        ),
+                        label: Text('Projects'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'Experience',
+                          child: Icon(Icons.timeline),
+                        ),
+                        label: Text('Experience'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'Education',
+                          child: Icon(Icons.school),
+                        ),
+                        label: Text('Education'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Tooltip(
+                          message: 'Contact',
+                          child: Icon(Icons.mail),
+                        ),
+                        label: Text('Contact'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Scaffold(
@@ -300,9 +400,9 @@ class _HomePageState extends State<HomePage> {
       ),
       mobile: Scaffold(
         appBar: AppBar(
-          title: Text(_titles[selectedIndex]),
+          title: Text(_currentTitle),
           centerTitle: true,
-          automaticallyImplyLeading: true,
+          automaticallyImplyLeading: true, // Always show drawer icon
           actions: [
             IconButton(
               icon: const Icon(Icons.brightness_6),
@@ -315,41 +415,58 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               const SizedBox(height: 32),
+              // Profile image and name
+              Column(
+                children: [
+                  CircleAvatar(
+                    radius: 44,
+                    backgroundImage: AssetImage(
+                      'assets/images/ahmedkhallaf.png',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Ahmed Khallaf',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
               _DrawerIconButton(
                 icon: Icons.home,
                 tooltip: 'Home',
                 selected: selectedIndex == 0,
-                onTap: () => setState(() => selectedIndex = 0),
+                onTap: () => _onMobileNavTap(0),
               ),
               _DrawerIconButton(
                 icon: Icons.person,
                 tooltip: 'About Me',
                 selected: selectedIndex == 1,
-                onTap: () => setState(() => selectedIndex = 1),
+                onTap: () => _onMobileNavTap(1),
               ),
               _DrawerIconButton(
                 icon: Icons.apps,
                 tooltip: 'Projects',
                 selected: selectedIndex == 2,
-                onTap: () => setState(() => selectedIndex = 2),
+                onTap: () => _onMobileNavTap(2),
               ),
               _DrawerIconButton(
                 icon: Icons.timeline,
                 tooltip: 'Experience',
                 selected: selectedIndex == 3,
-                onTap: () => setState(() => selectedIndex = 3),
+                onTap: () => _onMobileNavTap(3),
               ),
               _DrawerIconButton(
                 icon: Icons.school,
                 tooltip: 'Education',
                 selected: selectedIndex == 4,
-                onTap: () => setState(() => selectedIndex = 4),
+                onTap: () => _onMobileNavTap(4),
               ),
               _DrawerIconButton(
                 icon: Icons.mail,
                 tooltip: 'Contact',
                 selected: selectedIndex == 5,
-                onTap: () => setState(() => selectedIndex = 5),
+                onTap: () => _onMobileNavTap(5),
               ),
             ],
           ),
@@ -386,11 +503,26 @@ class _DrawerIconButton extends StatelessWidget {
           hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.08),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            child: Icon(
-              icon,
-              color: selected ? Theme.of(context).colorScheme.primary : null,
-              size: 28,
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  color:
+                      selected ? Theme.of(context).colorScheme.primary : null,
+                  size: 28,
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  tooltip,
+                  style: TextStyle(
+                    color:
+                        selected ? Theme.of(context).colorScheme.primary : null,
+                    fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
