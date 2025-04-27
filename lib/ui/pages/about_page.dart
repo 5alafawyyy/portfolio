@@ -133,11 +133,6 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('About Me'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
       body: ResponsiveLayout(
         desktop: _mainContent(context, width: 700),
         tablet: _mainContent(context, width: 500),

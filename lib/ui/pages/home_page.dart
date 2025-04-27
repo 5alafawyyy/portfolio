@@ -30,6 +30,15 @@ class _HomePageState extends State<HomePage> {
     '/contact',
   ];
 
+  static const List<String> _titles = [
+    '',
+    'About Me',
+    'Projects',
+    'Experience',
+    'Education',
+    'Contact',
+  ];
+
   void _onSidebarNavigate(String route) {
     final idx = _routes.indexOf(route);
     if (idx != -1) setState(() => selectedIndex = idx);
@@ -185,6 +194,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text(_titles[selectedIndex]),
+      centerTitle: true,
+      automaticallyImplyLeading: false,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.brightness_6),
+          onPressed: widget.onToggleTheme,
+        ),
+      ],
+    );
     return ResponsiveLayout(
       desktop: Row(
         children: [
@@ -226,16 +246,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: Scaffold(
-              appBar: AppBar(
-                title: const SizedBox.shrink(),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.brightness_6),
-                    onPressed: widget.onToggleTheme,
-                  ),
-                ],
-                automaticallyImplyLeading: false,
-              ),
+              appBar: appBar,
               body: _getPage(selectedIndex, context, 600, 220),
             ),
           ),
@@ -281,16 +292,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: Scaffold(
-              appBar: AppBar(
-                title: const SizedBox.shrink(),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.brightness_6),
-                    onPressed: widget.onToggleTheme,
-                  ),
-                ],
-                automaticallyImplyLeading: false,
-              ),
+              appBar: appBar,
               body: _getPage(selectedIndex, context, 500, 180),
             ),
           ),
@@ -298,7 +300,9 @@ class _HomePageState extends State<HomePage> {
       ),
       mobile: Scaffold(
         appBar: AppBar(
-          title: const SizedBox.shrink(),
+          title: Text(_titles[selectedIndex]),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
           actions: [
             IconButton(
               icon: const Icon(Icons.brightness_6),

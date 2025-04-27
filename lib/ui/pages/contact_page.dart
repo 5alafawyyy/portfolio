@@ -125,11 +125,6 @@ class ContactPage extends StatelessWidget {
     final theme = Theme.of(context);
     final formKey = GlobalKey<FormState>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Contact Me'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,

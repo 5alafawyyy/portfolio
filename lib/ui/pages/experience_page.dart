@@ -9,11 +9,6 @@ class ExperiencePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Experience'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
       body: ResponsiveLayout(
         desktop: _buildTimeline(context, width: 700),
         tablet: _buildTimeline(context, width: 500),

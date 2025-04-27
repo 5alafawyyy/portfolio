@@ -9,11 +9,6 @@ class EducationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Education'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
       body: ResponsiveLayout(
         desktop: _buildList(context, width: 700),
         tablet: _buildList(context, width: 500),

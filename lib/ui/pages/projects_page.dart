@@ -12,11 +12,6 @@ class ProjectsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Projects'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
       body: ResponsiveLayout(
         desktop: _buildGrid(context, crossAxisCount: 3),
         tablet: _buildGrid(context, crossAxisCount: 2),
