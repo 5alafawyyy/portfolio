@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../core/constants.dart';
 import '../widgets/responsive_layout.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class AboutPage extends StatelessWidget {
-  const AboutPage({Key? key}) : super(key: key);
+  const AboutPage({super.key});
 
   Widget _mainContent(BuildContext context, {double width = 500}) {
     return Center(

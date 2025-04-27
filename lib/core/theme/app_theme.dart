@@ -13,9 +13,10 @@ class AppTheme {
   static ThemeData get light => ThemeData(
     brightness: Brightness.light,
     primaryColor: mochaMousse,
-    splashColor: mochaMousse.withOpacity(0.18),
-    highlightColor: mochaMousse.withOpacity(0.10),
-    hoverColor: mochaMousse.withOpacity(0.08),
+    splashColor: mochaMousse.withValues(alpha: 0.18),
+    highlightColor: mochaMousse.withValues(alpha: 0.10),
+    hoverColor: mochaMousse.withValues(alpha: 0.08),
+    // ignore: deprecated_member_use
     primarySwatch: MaterialColor(mochaMousse.value, <int, Color>{
       50: Color(0xFFF5EFE7),
       100: Color(0xFFE6DCC2),
@@ -40,7 +41,7 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       unselectedIconTheme: IconThemeData(color: neutralIcon),
-      indicatorColor: mochaMousse.withOpacity(0.12),
+      indicatorColor: mochaMousse.withValues(alpha: 0.12),
     ),
     iconTheme: IconThemeData(color: neutralIcon),
     textTheme: GoogleFonts.poppinsTextTheme(),
@@ -49,13 +50,20 @@ class AppTheme {
   static ThemeData get dark => ThemeData(
     brightness: Brightness.dark,
     primaryColor: mochaMousse,
-    splashColor: mochaMousse.withOpacity(0.18),
-    highlightColor: mochaMousse.withOpacity(0.10),
-    hoverColor: mochaMousse.withOpacity(0.08),
+    splashColor: mochaMousse.withValues(alpha: 0.18),
+    highlightColor: mochaMousse.withValues(alpha: 0.10),
+    hoverColor: mochaMousse.withValues(alpha: 0.08),
     scaffoldBackgroundColor: darkBackground,
     canvasColor: darkBackground,
     cardColor: darkSurface,
-    dialogBackgroundColor: darkSurface,
+    dialogTheme: DialogTheme(
+      backgroundColor: darkSurface,
+      titleTextStyle: GoogleFonts.poppins(
+        color: mochaMousse,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    // ignore: deprecated_member_use
     primarySwatch: MaterialColor(mochaMousse.value, <int, Color>{
       50: Color(0xFFF5EFE7),
       100: Color(0xFFE6DCC2),
@@ -71,9 +79,7 @@ class AppTheme {
     colorScheme: ColorScheme.dark(
       primary: mochaMousse,
       secondary: mochaMousse,
-      background: darkBackground,
       surface: darkSurface,
-      onBackground: darkOnBackground,
       onSurface: darkOnBackground,
     ),
     navigationRailTheme: NavigationRailThemeData(
@@ -84,7 +90,7 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       unselectedIconTheme: IconThemeData(color: neutralIcon),
-      indicatorColor: mochaMousse.withOpacity(0.18),
+      indicatorColor: mochaMousse.withValues(alpha: 0.18),
     ),
     iconTheme: IconThemeData(color: darkOnBackground),
     textTheme: GoogleFonts.poppinsTextTheme(

@@ -112,11 +112,29 @@ Tech: Flutter, Laravel backend, custom UI components.
 
 Store Link: Google Play Store
 
+### 🌟 **EDUVA**  
+📱 [Google Play Store](https://play.google.com/store/apps/details?id=com.mutqana.eduva&hl=en) | [Huawei App Gallery](https://appgallery.huawei.com/app/C111561265?sharePrepath=ag&locale=ar_SA&source=appshare&subsource=C111561265&shareTo=com.android.bluetooth&shareFrom=appmarket&shareIds=939020438f6349699ff4a7684db4cd5a_com.android.bluetooth&callType=SHARE)
+
+### 🌟 **S Square**  
+📱 [App Store](https://apps.apple.com/eg/app/s-square/id1591739831) | [Google Play Store](https://play.google.com/store/apps/details?id=com.flasherCheetah.speedAndSuccess.speed_and_success&hl=en)
+
+### 🌟 **S Square Plus**  
+📱 [App Store](https://apps.apple.com/eg/app/s-square-plus/id1636308161) | [Google Play Store](https://play.google.com/store/apps/details?id=com.SSquare.EgyEDUAcademy)
+
+### 🌟 **Fax Shipping Express**  
+📱 [Google Play Store](https://play.google.com/store/apps/details?id=com.msar.fax_shipping_express)
+
+### 🌟 **Grable App**  
+📱 [Google Play Store](https://play.google.com/store/apps/details?id=com.msarweb.marble)
+
+### 🌟 **Pets Planet**  
+📱 [Google Play Store](https://play.google.com/store/apps/details?id=com.khalafawy.petsplanet&hl=en&gl=US)
+
+---
+
 Other Apps:
 
-Service Booking Platform: Allows users to schedule appointments for services.
-
-On-Demand Delivery App: Tailored for local business delivery (similar to grocery logistics).
+i need to support links from drive that not published by me but developed by me and other from code canyon
 
 🏢 Professional Experience:
 Msar Web (Feb 2024 – Present)

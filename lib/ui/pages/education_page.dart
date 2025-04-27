@@ -4,7 +4,7 @@ import '../widgets/responsive_layout.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class EducationPage extends StatelessWidget {
-  const EducationPage({Key? key}) : super(key: key);
+  const EducationPage({super.key});
 
   @override
   Widget build(BuildContext context) {

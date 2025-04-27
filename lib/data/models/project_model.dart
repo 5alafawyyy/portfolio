@@ -4,6 +4,7 @@ class Project {
   final List<String> tech;
   final Map<String, String> links; // e.g. {'Google Play': url, 'GitHub': url}
   final List<String> screenshots; // asset or network URLs
+  final String icon; // asset path for project icon
 
   Project({
     required this.name,
@@ -11,5 +12,6 @@ class Project {
     required this.tech,
     required this.links,
     required this.screenshots,
+    required this.icon,
   });
 }

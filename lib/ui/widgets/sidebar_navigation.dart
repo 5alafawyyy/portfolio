@@ -4,10 +4,10 @@ class SidebarNavigation extends StatelessWidget {
   final String selectedRoute;
   final void Function(String route) onNavigate;
   const SidebarNavigation({
-    Key? key,
+    super.key,
     required this.selectedRoute,
     required this.onNavigate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +62,19 @@ class _SidebarNavTile extends StatelessWidget {
     return Material(
       color:
           selected
-              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
               : Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        splashColor: Theme.of(context).colorScheme.primary.withOpacity(0.25),
-        hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.12),
-        highlightColor: Theme.of(context).colorScheme.primary.withOpacity(0.10),
+        splashColor: Theme.of(
+          context,
+        ).colorScheme.primary.withValues(alpha: 0.25),
+        hoverColor: Theme.of(
+          context,
+        ).colorScheme.primary.withValues(alpha: 0.12),
+        highlightColor: Theme.of(
+          context,
+        ).colorScheme.primary.withValues(alpha: 0.10),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),

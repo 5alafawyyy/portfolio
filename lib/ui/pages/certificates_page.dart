@@ -5,7 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CertificatesPage extends StatelessWidget {
-  const CertificatesPage({Key? key}) : super(key: key);
+  const CertificatesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

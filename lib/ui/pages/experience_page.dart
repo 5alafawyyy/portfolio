@@ -4,7 +4,7 @@ import '../widgets/responsive_layout.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class ExperiencePage extends StatelessWidget {
-  const ExperiencePage({Key? key}) : super(key: key);
+  const ExperiencePage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -118,11 +118,11 @@ class ContactFormBloc extends Bloc<ContactFormEvent, ContactFormState> {
 }
 
 class ContactPage extends StatelessWidget {
-  const ContactPage({Key? key}) : super(key: key);
+  const ContactPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       body: Container(
@@ -149,17 +149,21 @@ class ContactPage extends StatelessWidget {
                         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.75),
+                            color: Colors.white.withValues(alpha: 0.75),
                             borderRadius: BorderRadius.circular(28),
                             boxShadow: [
                               BoxShadow(
-                                color: AppTheme.mochaMousse.withOpacity(0.10),
+                                color: AppTheme.mochaMousse.withValues(
+                                  alpha: 0.10,
+                                ),
                                 blurRadius: 32,
                                 offset: const Offset(0, 12),
                               ),
                             ],
                             border: Border.all(
-                              color: AppTheme.mochaMousse.withOpacity(0.18),
+                              color: AppTheme.mochaMousse.withValues(
+                                alpha: 0.18,
+                              ),
                               width: 1.5,
                             ),
                           ),
@@ -185,7 +189,7 @@ class ContactPage extends StatelessWidget {
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: AppTheme.mochaMousse
-                                                .withOpacity(0.13),
+                                                .withValues(alpha: 0.13),
                                             shape: BoxShape.circle,
                                           ),
                                           padding: const EdgeInsets.all(20),

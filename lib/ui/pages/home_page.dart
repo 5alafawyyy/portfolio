@@ -22,15 +22,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
 
-  static const List<String> _routes = [
-    '/',
-    '/about',
-    '/projects',
-    '/experience',
-    '/education',
-    '/certificates',
-    '/contact',
-  ];
+  // static const List<String> _routes = [
+  //   '/',
+  //   '/about',
+  //   '/projects',
+  //   '/experience',
+  //   '/education',
+  //   '/certificates',
+  //   '/contact',
+  // ];
 
   static const List<String> _titles = [
     '',
@@ -45,10 +45,10 @@ class _HomePageState extends State<HomePage> {
   // Helper to get the title for the AppBar
   String get _currentTitle => _titles[selectedIndex];
 
-  void _onSidebarNavigate(String route) {
-    final idx = _routes.indexOf(route);
-    if (idx != -1) setState(() => selectedIndex = idx);
-  }
+  // void _onSidebarNavigate(String route) {
+  //   final idx = _routes.indexOf(route);
+  //   if (idx != -1) setState(() => selectedIndex = idx);
+  // }
 
   void _onMobileNavTap(int idx) {
     setState(() => selectedIndex = idx);
@@ -112,36 +112,36 @@ class _HomePageState extends State<HomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _socialButton(
+                  _socialAssetButton(
                         context,
-                        icon: Icons.email,
+                        asset: 'assets/icons/gmail.png',
                         tooltip: 'Email',
                         url: 'mailto:${AppConstants.email}',
                       )
                       .animate()
                       .fadeIn(duration: 500.ms, delay: 600.ms)
                       .scale(delay: 600.ms),
-                  _socialButton(
+                  _socialAssetButton(
                         context,
-                        icon: Icons.code,
+                        asset: 'assets/icons/github.png',
                         tooltip: 'GitHub',
                         url: AppConstants.github,
                       )
                       .animate()
                       .fadeIn(duration: 500.ms, delay: 700.ms)
                       .scale(delay: 700.ms),
-                  _socialButton(
+                  _socialAssetButton(
                         context,
-                        icon: Icons.business,
+                        asset: 'assets/icons/linkedin.png',
                         tooltip: 'LinkedIn',
                         url: AppConstants.linkedin,
                       )
                       .animate()
                       .fadeIn(duration: 500.ms, delay: 800.ms)
                       .scale(delay: 800.ms),
-                  _socialButton(
+                  _socialAssetButton(
                         context,
-                        icon: Icons.chat,
+                        asset: 'assets/icons/whatsapp.png',
                         tooltip: 'WhatsApp',
                         url: AppConstants.whatsapp,
                       )
@@ -157,15 +157,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _socialButton(
+  Widget _socialAssetButton(
     BuildContext context, {
-    required IconData icon,
+    required String asset,
     required String tooltip,
     required String url,
   }) {
     return IconButton(
-      icon: Icon(
-        icon,
+      icon: ImageIcon(
+        AssetImage(asset),
         size: 28,
         color: Theme.of(context).colorScheme.secondary,
       ),
@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage> {
           await launchUrl(uri);
         }
       },
-      hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+      hoverColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
       splashRadius: 24,
     );
   }
@@ -328,24 +328,26 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const SizedBox(height: 32),
                 // Profile image and name
-                Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 32,
-                      backgroundImage: AssetImage(
-                        'assets/images/ahmedkhallaf.jpg',
+                Material(
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 32,
+                        backgroundImage: AssetImage(
+                          'assets/images/ahmedkhallaf.jpg',
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Ahmed Khallaf',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Ahmed Khallaf',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Expanded(
@@ -435,20 +437,25 @@ class _HomePageState extends State<HomePage> {
             children: [
               const SizedBox(height: 32),
               // Profile image and name
-              Column(
-                children: [
-                  CircleAvatar(
-                    radius: 44,
-                    backgroundImage: AssetImage(
-                      'assets/images/ahmedkhallaf.jpg',
+              Material(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 44,
+                      backgroundImage: AssetImage(
+                        'assets/images/ahmedkhallaf.jpg',
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Ahmed Khallaf',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ],
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Ahmed Khallaf',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
               _DrawerIconButton(
@@ -520,12 +527,16 @@ class _DrawerIconButton extends StatelessWidget {
       child: Material(
         color:
             selected
-                ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
                 : Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          splashColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-          hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+          splashColor: Theme.of(
+            context,
+          ).colorScheme.primary.withValues(alpha: 0.2),
+          hoverColor: Theme.of(
+            context,
+          ).colorScheme.primary.withValues(alpha: 0.08),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
