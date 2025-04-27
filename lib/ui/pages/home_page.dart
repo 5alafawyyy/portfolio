@@ -321,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                     CircleAvatar(
                       radius: 32,
                       backgroundImage: AssetImage(
-                        'assets/images/ahmedkhallaf.png',
+                        'assets/images/ahmedkhallaf.jpg',
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -421,7 +421,7 @@ class _HomePageState extends State<HomePage> {
                   CircleAvatar(
                     radius: 44,
                     backgroundImage: AssetImage(
-                      'assets/images/ahmedkhallaf.png',
+                      'assets/images/ahmedkhallaf.jpg',
                     ),
                   ),
                   const SizedBox(height: 12),
