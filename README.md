@@ -15,9 +15,20 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+## 📦 Packages Used
+
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) — State management (used for forms and scalable app state)
+- [url_launcher](https://pub.dev/packages/url_launcher) — Open external links (social, project links, email, etc.)
+- [flutter_animate](https://pub.dev/packages/flutter_animate) — Micro animations (fade, slide, scale, shimmer, etc.)
+- [carousel_slider](https://pub.dev/packages/carousel_slider) — Project screenshots carousel
+- [firebase_core](https://pub.dev/packages/firebase_core), [firebase_auth](https://pub.dev/packages/firebase_auth), [cloud_firestore](https://pub.dev/packages/cloud_firestore), etc. — For backend integration (optional)
+- [rive](https://pub.dev/packages/rive) — For advanced vector animations (optional)
+
 ## 🚀 Automatic Deployment to GitHub Pages (CI/CD)
 
 This project uses **GitHub Actions** for seamless deployment to GitHub Pages every time you push to the `main` branch.
+
+> **Optional:** You can also deploy to **Firebase Hosting**. Just run `flutter build web --release` and deploy the `build/web` folder using the Firebase CLI. See [Firebase Hosting docs](https://firebase.google.com/docs/hosting) for details.
 
 ### How it works
 - On every push to `main`, the workflow in `.github/workflows/deploy.yml` will:
