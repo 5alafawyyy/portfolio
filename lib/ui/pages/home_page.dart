@@ -666,7 +666,9 @@ class _AnimatedShimmerButtonState extends State<_AnimatedShimmerButton>
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.4),
                 blurRadius: _shadowAnim.value,
                 spreadRadius: 1,
               ),
@@ -677,9 +679,9 @@ class _AnimatedShimmerButtonState extends State<_AnimatedShimmerButton>
             shaderCallback: (Rect bounds) {
               return material.LinearGradient(
                 colors: [
-                  Colors.white.withOpacity(0.7),
-                  Theme.of(context).colorScheme.primary.withOpacity(0.7),
-                  Colors.white.withOpacity(0.7),
+                  Colors.white.withValues(alpha: 0.7),
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+                  Colors.white.withValues(alpha: 0.7),
                 ],
                 stops: [0.0, 0.5, 1.0],
                 begin: Alignment.topLeft,
