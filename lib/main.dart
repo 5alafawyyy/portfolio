@@ -7,6 +7,7 @@ import 'ui/pages/about_page.dart';
 import 'ui/pages/projects_page.dart';
 import 'ui/pages/experience_page.dart';
 import 'ui/pages/contact_page.dart';
+import 'ui/pages/education_page.dart';
 
 void main() {
   runApp(BlocProvider(create: (_) => ThemeBloc(), child: const PortfolioApp()));
@@ -35,6 +36,7 @@ class PortfolioApp extends StatelessWidget {
             '/projects': (context) => const ProjectsPage(),
             '/experience': (context) => const ExperiencePage(),
             '/contact': (context) => const ContactPage(),
+            '/education': (context) => const EducationPage(),
           },
         );
       },

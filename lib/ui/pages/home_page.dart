@@ -7,6 +7,7 @@ import 'about_page.dart';
 import 'projects_page.dart';
 import 'experience_page.dart';
 import 'contact_page.dart';
+import 'education_page.dart';
 import 'package:rive/rive.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
     '/about',
     '/projects',
     '/experience',
+    '/education',
     '/contact',
   ];
 
@@ -173,6 +175,8 @@ class _HomePageState extends State<HomePage> {
       case 3:
         return const ExperiencePage();
       case 4:
+        return const EducationPage();
+      case 5:
         return const ContactPage();
       default:
         return _mainContent(context, width: width, avatarSize: avatarSize);
@@ -209,6 +213,10 @@ class _HomePageState extends State<HomePage> {
                   child: Icon(Icons.timeline),
                 ),
                 label: Text('Experience'),
+              ),
+              NavigationRailDestination(
+                icon: Tooltip(message: 'Education', child: Icon(Icons.school)),
+                label: Text('Education'),
               ),
               NavigationRailDestination(
                 icon: Tooltip(message: 'Contact', child: Icon(Icons.mail)),
@@ -260,6 +268,10 @@ class _HomePageState extends State<HomePage> {
                   child: Icon(Icons.timeline),
                 ),
                 label: Text('Experience'),
+              ),
+              NavigationRailDestination(
+                icon: Tooltip(message: 'Education', child: Icon(Icons.school)),
+                label: Text('Education'),
               ),
               NavigationRailDestination(
                 icon: Tooltip(message: 'Contact', child: Icon(Icons.mail)),
@@ -324,10 +336,16 @@ class _HomePageState extends State<HomePage> {
                 onTap: () => setState(() => selectedIndex = 3),
               ),
               _DrawerIconButton(
-                icon: Icons.mail,
-                tooltip: 'Contact',
+                icon: Icons.school,
+                tooltip: 'Education',
                 selected: selectedIndex == 4,
                 onTap: () => setState(() => selectedIndex = 4),
+              ),
+              _DrawerIconButton(
+                icon: Icons.mail,
+                tooltip: 'Contact',
+                selected: selectedIndex == 5,
+                onTap: () => setState(() => selectedIndex = 5),
               ),
             ],
           ),
