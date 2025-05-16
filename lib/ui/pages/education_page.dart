@@ -1,23 +1,69 @@
 import 'package:flutter/material.dart';
 import '../../data/data_sources/education_data.dart';
+import '../../data/models/education_model.dart';
 import '../widgets/responsive_layout.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class EducationPage extends StatelessWidget {
+class EducationPage extends StatefulWidget {
   const EducationPage({super.key});
 
   @override
+  State<EducationPage> createState() => _EducationPageState();
+}
+
+class _EducationPageState extends State<EducationPage> {
+  final EducationDataSource _dataSource = EducationDataSource();
+  late Future<List<Education>> _educationFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _educationFuture = _dataSource.getEducation();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ResponsiveLayout(
-        desktop: _buildList(context, width: 700),
-        tablet: _buildList(context, width: 500),
-        mobile: _buildList(context, width: double.infinity),
-      ),
+    return FutureBuilder<List<Education>>(
+      future: _educationFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Error loading education: ${snapshot.error}',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          );
+        }
+
+        final educations = snapshot.data ?? [];
+        if (educations.isEmpty) {
+          return const Center(child: Text('No education found'));
+        }
+
+        return Scaffold(
+          body: ResponsiveLayout(
+            desktop: _buildList(context, width: 700, educations: educations),
+            tablet: _buildList(context, width: 500, educations: educations),
+            mobile: _buildList(
+              context,
+              width: double.infinity,
+              educations: educations,
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildList(BuildContext context, {required double width}) {
+  Widget _buildList(
+    BuildContext context, {
+    required double width,
+    required List<Education> educations,
+  }) {
     return Center(
       child: SizedBox(
         width: width,

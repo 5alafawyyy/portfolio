@@ -1,25 +1,15 @@
 import '../models/experience_model.dart';
+import '../supabase/supabase_service.dart';
 
-final List<Experience> experiences = [
-  Experience(
-    role: 'Flutter Developer',
-    company: 'Msar Web',
-    duration: 'Feb 2024 – Present',
-    achievements: [
-      'Cross-platform app development with Flutter.',
-      'Firebase and RESTful backend integration.',
-      'Agile collaboration with backend and design teams.',
-      'Version control with Git & GitHub.',
-    ],
-  ),
-  Experience(
-    role: 'Flutter Developer',
-    company: 'Mutqana (Remote)',
-    duration: 'Sep 2023 – Sep 2024',
-    achievements: [
-      'Developed EDUVA from scratch.',
-      'Remote teamwork with continuous user feedback integration.',
-      'UI/UX design translation to functional Flutter code.',
-    ],
-  ),
-];
+class ExperienceDataSource {
+  final SupabaseService _supabaseService = SupabaseService();
+
+  Future<List<Experience>> getExperience() async {
+    try {
+      return await _supabaseService.getExperience();
+    } catch (e) {
+      print('Error fetching experience: $e');
+      return [];
+    }
+  }
+}

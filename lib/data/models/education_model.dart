@@ -8,4 +8,12 @@ class Education {
     required this.institution,
     required this.duration,
   });
+
+  factory Education.fromJson(Map<String, dynamic> json) {
+    return Education(
+      degree: json['degree'],
+      institution: json['institution'],
+      duration: json['duration'],
+    );
+  }
 }

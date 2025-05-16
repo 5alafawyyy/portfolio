@@ -1,76 +1,15 @@
 import '../models/project_model.dart';
+import '../supabase/supabase_service.dart';
 
-final List<Project> projects = [
-  Project(
-    name: 'EDUVA (Educational Quiz App)',
-    description: 'Trivia, audio/image quizzes, contest modes, leaderboards.',
-    tech: ['Flutter', 'Firebase', 'REST APIs', 'Social Login'],
-    links: {
-      'Google Play':
-          'https://play.google.com/store/apps/details?id=com.mutqana.eduva&hl=en',
-      'Huawei App Gallery':
-          'https://appgallery.huawei.com/app/C111561265?sharePrepath=ag&locale=ar_SA&source=appshare&subsource=C111561265&shareTo=com.android.bluetooth&shareFrom=appmarket&shareIds=939020438f6349699ff4a7684db4cd5a_com.android.bluetooth&callType=SHARE',
-    },
-    screenshots: ['assets/projects/eduva.png'],
-    icon: 'assets/projects/eduva.png',
-  ),
-  Project(
-    name: 'S Square Plus (Video Education Platform)',
-    description:
-        'Lecture streaming (YouTube/Vimeo/Google Drive), student dashboard.',
-    tech: ['Flutter', 'Firebase', 'YouTube Explode'],
-    links: {
-      'App Store': 'https://apps.apple.com/eg/app/s-square-plus/id1636308161',
-      'Google Play':
-          'https://play.google.com/store/apps/details?id=com.SSquare.EgyEDUAcademy',
-    },
-    screenshots: ['assets/projects/ssquare_plus.png'],
-    icon: 'assets/projects/ssquare_plus.png',
-  ),
-  Project(
-    name: 'Fax Shipping Express (Logistics App)',
-    description:
-        'Shipment tracking, vendor-customer communication, real-time updates.',
-    tech: ['Flutter', 'Firebase', 'Node.js'],
-    links: {
-      'Google Play':
-          'https://play.google.com/store/apps/details?id=com.msar.fax_shipping_express',
-    },
-    screenshots: ['assets/projects/fax.png'],
-    icon: 'assets/projects/fax.png',
-  ),
-  Project(
-    name: 'Grable App (Marble & Granite Marketplace)',
-    description: 'Product listing, order tracking, vendor management.',
-    tech: ['Flutter', 'Laravel', 'Custom UI'],
-    links: {
-      'Google Play':
-          'https://play.google.com/store/apps/details?id=com.msarweb.marble',
-    },
-    screenshots: ['assets/projects/grable.png'],
-    icon: 'assets/projects/grable.png',
-  ),
-  Project(
-    name: 'Pets Planet',
-    description: 'Pet adoption, care, and marketplace app.',
-    tech: ['Flutter'],
-    links: {
-      'Google Play':
-          'https://play.google.com/store/apps/details?id=com.khalafawy.petsplanet&hl=en&gl=US',
-    },
-    screenshots: ['assets/projects/pets.png'],
-    icon: 'assets/projects/pets.png',
-  ),
-  Project(
-    name: 'S Square',
-    description: 'Lecture streaming, student dashboard.',
-    tech: ['Flutter', 'Firebase'],
-    links: {
-      'App Store': 'https://apps.apple.com/eg/app/s-square/id1591739831',
-      'Google Play':
-          'https://play.google.com/store/apps/details?id=com.flasherCheetah.speedAndSuccess.speed_and_success&hl=en',
-    },
-    screenshots: ['assets/projects/ssquare.png'],
-    icon: 'assets/projects/ssquare.png',
-  ),
-];
+class ProjectsDataSource {
+  final SupabaseService _supabaseService = SupabaseService();
+
+  Future<List<Project>> getProjects() async {
+    try {
+      return await _supabaseService.getProjects();
+    } catch (e) {
+      print('Error fetching projects: $e');
+      return [];
+    }
+  }
+}

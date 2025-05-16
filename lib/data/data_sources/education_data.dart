@@ -1,9 +1,15 @@
 import '../models/education_model.dart';
+import '../supabase/supabase_service.dart';
 
-final List<Education> educations = [
-  Education(
-    degree: 'Bachelor of Electronic Engineering',
-    institution: 'Faculty of Electronic Engineering, Menoufia University',
-    duration: '2017 – 2022',
-  ),
-];
+class EducationDataSource {
+  final SupabaseService _supabaseService = SupabaseService();
+
+  Future<List<Education>> getEducation() async {
+    try {
+      return await _supabaseService.getEducation();
+    } catch (e) {
+      print('Error fetching education: $e');
+      return [];
+    }
+  }
+}

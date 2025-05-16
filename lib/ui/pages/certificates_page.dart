@@ -1,97 +1,99 @@
 import 'package:flutter/material.dart';
 import '../../data/data_sources/certificates_data.dart';
+import '../../data/models/certificate_model.dart';
 import '../widgets/responsive_layout.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CertificatesPage extends StatelessWidget {
+class CertificatesPage extends StatefulWidget {
   const CertificatesPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ResponsiveLayout(
-        desktop: _buildList(context, width: 700),
-        tablet: _buildList(context, width: 500),
-        mobile: _buildList(context, width: double.infinity),
-      ),
-    );
+  State<CertificatesPage> createState() => _CertificatesPageState();
+}
+
+class _CertificatesPageState extends State<CertificatesPage> {
+  final CertificatesDataSource _dataSource = CertificatesDataSource();
+  late Future<List<Certificate>> _certificatesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _certificatesFuture = _dataSource.getCertificates();
   }
 
-  Widget _buildList(BuildContext context, {required double width}) {
-    return Center(
-      child: SizedBox(
-        width: width,
-        child: ListView.separated(
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Certificate>>(
+      future: _certificatesFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Error loading certificates: ${snapshot.error}',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          );
+        }
+
+        final certificates = snapshot.data ?? [];
+        if (certificates.isEmpty) {
+          return const Center(child: Text('No certificates found'));
+        }
+
+        return ListView.builder(
           padding: const EdgeInsets.all(24),
           itemCount: certificates.length,
-          separatorBuilder: (context, i) => const SizedBox(height: 24),
-          itemBuilder: (context, i) {
-            final cert = certificates[i];
+          itemBuilder: (context, index) {
+            final certificate = certificates[index];
             return Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.workspace_premium,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                cert.title,
-                                style: Theme.of(context).textTheme.titleLarge
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          cert.issuer,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        if (cert.url != null && cert.url!.isNotEmpty) ...[
-                          const SizedBox(height: 8),
-                          GestureDetector(
-                            onTap: () async {
-                              final uri = Uri.parse(cert.url!);
-                              if (await canLaunchUrl(uri)) {
-                                await launchUrl(uri);
-                              }
-                            },
-                            child: Text(
-                              'View Certificate',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
+                  margin: const EdgeInsets.only(bottom: 24),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(24),
+                    leading: Icon(
+                      Icons.workspace_premium,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 32,
                     ),
+                    title: Text(
+                      certificate.title,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      certificate.issuer,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    trailing:
+                        certificate.url != null
+                            ? IconButton(
+                              icon: const Icon(Icons.link),
+                              onPressed: () async {
+                                final uri = Uri.parse(certificate.url!);
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri);
+                                }
+                              },
+                            )
+                            : null,
                   ),
                 )
                 .animate()
-                .fadeIn(duration: 600.ms, delay: (i * 120).ms)
-                .slideY(
-                  begin: 0.1,
+                .fadeIn(duration: 600.ms, delay: (100 * index).ms)
+                .slideX(
+                  begin: 0.2,
                   end: 0,
                   duration: 600.ms,
-                  delay: (i * 120).ms,
+                  delay: (100 * index).ms,
                 );
           },
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/constants.dart';
+import '../../data/data_sources/profile_data.dart';
+import '../../data/models/profile_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/responsive_layout.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -9,8 +10,9 @@ import 'experience_page.dart';
 import 'contact_page.dart';
 import 'education_page.dart';
 import 'certificates_page.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' as rive;
 import 'package:flutter/material.dart' as material;
+import 'package:flutter/foundation.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback onToggleTheme;
@@ -22,16 +24,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
+  final ProfileDataSource _profileDataSource = ProfileDataSource();
+  late Future<Profile> _profileFuture;
 
-  // static const List<String> _routes = [
-  //   '/',
-  //   '/about',
-  //   '/projects',
-  //   '/experience',
-  //   '/education',
-  //   '/certificates',
-  //   '/contact',
-  // ];
+  @override
+  void initState() {
+    super.initState();
+    _profileFuture = _profileDataSource.getProfile();
+  }
 
   static const List<String> _titles = [
     '',
@@ -43,17 +43,11 @@ class _HomePageState extends State<HomePage> {
     'Contact',
   ];
 
-  // Helper to get the title for the AppBar
   String get _currentTitle => _titles[selectedIndex];
-
-  // void _onSidebarNavigate(String route) {
-  //   final idx = _routes.indexOf(route);
-  //   if (idx != -1) setState(() => selectedIndex = idx);
-  // }
 
   void _onMobileNavTap(int idx) {
     setState(() => selectedIndex = idx);
-    Navigator.of(context).maybePop(); // Closes the drawer if open
+    Navigator.of(context).maybePop();
   }
 
   Widget _mainContent(
@@ -61,151 +55,134 @@ class _HomePageState extends State<HomePage> {
     double width = 400,
     double avatarSize = 180,
   }) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: SizedBox(
-          width: width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Add Rive animation at the top of the intro
-              SizedBox(
-                width: avatarSize,
-                height: avatarSize,
-                child: RiveAnimation.asset('assets/animations/intro.riv'),
-              ),
-              const SizedBox(height: 32),
-              AnimatedOpacity(
-                opacity: 1.0,
-                duration: const Duration(seconds: 2),
-                child: Column(
-                  children: [
-                    Text(
-                      AppConstants.name,
-                      style: Theme.of(context).textTheme.headlineMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ).animate().fadeIn(duration: 700.ms, delay: 200.ms),
-                    const SizedBox(height: 12),
-                    Text(
-                      AppConstants.title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                      textAlign: TextAlign.center,
-                    ).animate().fadeIn(duration: 700.ms, delay: 300.ms),
-                    const SizedBox(height: 12),
-                    Text(
-                      AppConstants.location,
-                      style: Theme.of(context).textTheme.bodySmall,
-                      textAlign: TextAlign.center,
-                    ).animate().fadeIn(duration: 700.ms, delay: 400.ms),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
-              Text(
-                'Contact & Social',
-                style: Theme.of(context).textTheme.titleMedium,
-              ).animate().fadeIn(duration: 700.ms, delay: 500.ms),
-              const SizedBox(height: 12),
-              Row(
+    return FutureBuilder<Profile>(
+      future: _profileFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Error loading profile: ${snapshot.error}',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          );
+        }
+
+        final profile = snapshot.data!;
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: SizedBox(
+              width: width,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  _socialAssetButton(
-                        context,
-                        asset: 'assets/icons/gmail.png',
-                        tooltip: 'Email',
-                        url: 'mailto:${AppConstants.email}',
-                      )
-                      .animate()
-                      .fadeIn(duration: 500.ms, delay: 600.ms)
-                      .scale(delay: 600.ms),
-                  _socialAssetButton(
-                        context,
-                        asset: 'assets/icons/github.png',
-                        tooltip: 'GitHub',
-                        url: AppConstants.github,
-                      )
-                      .animate()
-                      .fadeIn(duration: 500.ms, delay: 700.ms)
-                      .scale(delay: 700.ms),
-                  _socialAssetButton(
-                        context,
-                        asset: 'assets/icons/linkedin.png',
-                        tooltip: 'LinkedIn',
-                        url: AppConstants.linkedin,
-                      )
-                      .animate()
-                      .fadeIn(duration: 500.ms, delay: 800.ms)
-                      .scale(delay: 800.ms),
-                  _socialAssetButton(
-                        context,
-                        asset: 'assets/icons/whatsapp.png',
-                        tooltip: 'WhatsApp',
-                        url: AppConstants.whatsapp,
-                      )
-                      .animate()
-                      .fadeIn(duration: 500.ms, delay: 900.ms)
-                      .scale(delay: 900.ms),
+                  SizedBox(
+                    width: avatarSize,
+                    height: avatarSize,
+                    child: rive.RiveAnimation.asset(
+                      'assets/animations/intro.riv',
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  AnimatedOpacity(
+                    opacity: 1.0,
+                    duration: const Duration(seconds: 2),
+                    child: Column(
+                      children: [
+                        Text(
+                          profile.name,
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ).animate().fadeIn(duration: 700.ms, delay: 200.ms),
+                        const SizedBox(height: 12),
+                        Text(
+                          profile.title,
+                          style: Theme.of(context).textTheme.titleMedium,
+                          textAlign: TextAlign.center,
+                        ).animate().fadeIn(duration: 700.ms, delay: 300.ms),
+                        const SizedBox(height: 12),
+                        Text(
+                          profile.location,
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        ).animate().fadeIn(duration: 700.ms, delay: 400.ms),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Text(
+                    'Contact & Social',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ).animate().fadeIn(duration: 700.ms, delay: 500.ms),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _socialAssetButton(
+                            context,
+                            asset: 'assets/icons/gmail.png',
+                            tooltip: 'Email',
+                            url: 'mailto:${profile.email}',
+                          )
+                          .animate()
+                          .fadeIn(duration: 500.ms, delay: 600.ms)
+                          .scale(delay: 600.ms),
+                      _socialAssetButton(
+                            context,
+                            asset: 'assets/icons/github.png',
+                            tooltip: 'GitHub',
+                            url: profile.github,
+                          )
+                          .animate()
+                          .fadeIn(duration: 500.ms, delay: 700.ms)
+                          .scale(delay: 700.ms),
+                      _socialAssetButton(
+                            context,
+                            asset: 'assets/icons/linkedin.png',
+                            tooltip: 'LinkedIn',
+                            url: profile.linkedin,
+                          )
+                          .animate()
+                          .fadeIn(duration: 500.ms, delay: 800.ms)
+                          .scale(delay: 800.ms),
+                      _socialAssetButton(
+                            context,
+                            asset: 'assets/icons/whatsapp.png',
+                            tooltip: 'WhatsApp',
+                            url: profile.whatsapp,
+                          )
+                          .animate()
+                          .fadeIn(duration: 500.ms, delay: 900.ms)
+                          .scale(delay: 900.ms),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  _AnimatedShimmerButton(
+                    icon: Icons.download,
+                    label: 'Download CV',
+                    onPressed: () async {
+                      final uri = Uri.parse(profile.cvUrl);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
-              const SizedBox(height: 20),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              _AnimatedShimmerButton(
-                icon: Icons.download,
-                label: 'Download CV',
-                onPressed: () async {
-                  // Replace with your actual CV URL or asset
-                  const cvUrl =
-                      'https://drive.google.com/file/d/1UPxmHswdr0ciFxn1DkmU9edumw0EIi0Y/view?usp=drive_link';
-                  final uri = Uri.parse(cvUrl);
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  }
-                },
-              ),
-              //     const SizedBox(width: 16),
-              //     ElevatedButton.icon(
-              //       icon: const Icon(Icons.visibility),
-              //       label: const Text('View CV'),
-              //       style: ElevatedButton.styleFrom(
-              //         padding: const EdgeInsets.symmetric(
-              //           horizontal: 20,
-              //           vertical: 14,
-              //         ),
-              //         textStyle: const TextStyle(
-              //           fontSize: 16,
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //         backgroundColor: Theme.of(context).colorScheme.secondary,
-              //         foregroundColor: Colors.white,
-              //         shape: RoundedRectangleBorder(
-              //           borderRadius: BorderRadius.circular(12),
-              //         ),
-              //       ),
-              //       onPressed: () async {
-              //         // Replace with your actual CV view URL
-              //         const cvViewUrl =
-              //             'https://drive.google.com/file/d/YOUR_CV_FILE_ID/view?usp=sharing';
-              //         final uri = Uri.parse(cvViewUrl);
-              //         if (await canLaunchUrl(uri)) {
-              //           await launchUrl(
-              //             uri,
-              //             mode: LaunchMode.externalApplication,
-              //           );
-              //         }
-              //       },
-              //     ),
-              //   ],
-              // ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -228,7 +205,7 @@ class _HomePageState extends State<HomePage> {
           await launchUrl(uri);
         }
       },
-      hoverColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
+      hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.08),
       splashRadius: 24,
     );
   }
@@ -260,7 +237,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-      title: Text(_titles[selectedIndex]),
+      title: Text(_currentTitle),
       centerTitle: true,
       automaticallyImplyLeading: false,
       actions: [
@@ -270,292 +247,316 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
-    return ResponsiveLayout(
-      desktop: Row(
-        children: [
-          Container(
-            width: 80,
-            color: Theme.of(context).navigationRailTheme.backgroundColor,
-            child: Column(
-              children: [
-                const SizedBox(height: 32),
-                // Profile image and name
-                Material(
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 32,
-                        backgroundImage: AssetImage(
-                          'assets/images/ahmedkhallaf.jpg',
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Ahmed Khallaf',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Expanded(
-                  child: NavigationRail(
-                    selectedIndex: selectedIndex,
-                    onDestinationSelected:
-                        (idx) => setState(() => selectedIndex = idx),
-                    labelType: NavigationRailLabelType.none,
-                    backgroundColor:
-                        Theme.of(context).navigationRailTheme.backgroundColor,
-                    destinations: const [
-                      NavigationRailDestination(
-                        icon: Tooltip(message: 'Home', child: Icon(Icons.home)),
-                        label: Text('Home'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'About Me',
-                          child: Icon(Icons.person),
-                        ),
-                        label: Text('About Me'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Projects',
-                          child: Icon(Icons.apps),
-                        ),
-                        label: Text('Projects'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Experience',
-                          child: Icon(Icons.timeline),
-                        ),
-                        label: Text('Experience'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Education',
-                          child: Icon(Icons.school),
-                        ),
-                        label: Text('Education'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Certificates',
-                          child: Icon(Icons.workspace_premium),
-                        ),
-                        label: Text('Certificates'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Contact',
-                          child: Icon(Icons.mail),
-                        ),
-                        label: Text('Contact'),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+
+    return FutureBuilder<Profile>(
+      future: _profileFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Error loading profile: ${snapshot.error}',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
-          ),
-          Expanded(
-            child: Scaffold(
-              appBar: appBar,
-              body: _getPage(selectedIndex, context, 600, 220),
-            ),
-          ),
-        ],
-      ),
-      tablet: Row(
-        children: [
-          Container(
-            width: 80,
-            color: Theme.of(context).navigationRailTheme.backgroundColor,
-            child: Column(
-              children: [
-                const SizedBox(height: 32),
-                // Profile image and name
-                Material(
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 32,
-                        backgroundImage: AssetImage(
-                          'assets/images/ahmedkhallaf.jpg',
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Ahmed Khallaf',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Expanded(
-                  child: NavigationRail(
-                    selectedIndex: selectedIndex,
-                    onDestinationSelected:
-                        (idx) => setState(() => selectedIndex = idx),
-                    labelType: NavigationRailLabelType.none,
-                    backgroundColor:
-                        Theme.of(context).navigationRailTheme.backgroundColor,
-                    destinations: const [
-                      NavigationRailDestination(
-                        icon: Tooltip(message: 'Home', child: Icon(Icons.home)),
-                        label: Text('Home'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'About Me',
-                          child: Icon(Icons.person),
-                        ),
-                        label: Text('About Me'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Projects',
-                          child: Icon(Icons.apps),
-                        ),
-                        label: Text('Projects'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Experience',
-                          child: Icon(Icons.timeline),
-                        ),
-                        label: Text('Experience'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Education',
-                          child: Icon(Icons.school),
-                        ),
-                        label: Text('Education'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Certificates',
-                          child: Icon(Icons.workspace_premium),
-                        ),
-                        label: Text('Certificates'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Tooltip(
-                          message: 'Contact',
-                          child: Icon(Icons.mail),
-                        ),
-                        label: Text('Contact'),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Scaffold(
-              appBar: appBar,
-              body: _getPage(selectedIndex, context, 500, 180),
-            ),
-          ),
-        ],
-      ),
-      mobile: Scaffold(
-        appBar: AppBar(
-          title: Text(_currentTitle),
-          centerTitle: true,
-          automaticallyImplyLeading: true, // Always show drawer icon
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.brightness_6),
-              onPressed: widget.onToggleTheme,
-            ),
-          ],
-        ),
-        body: _getPage(selectedIndex, context, double.infinity, 120),
-        drawer: Drawer(
-          child: Column(
+          );
+        }
+
+        final profile = snapshot.data!;
+        return ResponsiveLayout(
+          desktop: Row(
             children: [
-              const SizedBox(height: 32),
-              // Profile image and name
-              Material(
+              Container(
+                width: 80,
+                color: Theme.of(context).navigationRailTheme.backgroundColor,
                 child: Column(
                   children: [
-                    CircleAvatar(
-                      radius: 44,
-                      backgroundImage: AssetImage(
-                        'assets/images/ahmedkhallaf.jpg',
+                    const SizedBox(height: 32),
+                    Material(
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 32,
+                            backgroundImage: NetworkImage(profile.avatarUrl),
+                            onBackgroundImageError: (_, __) {},
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            profile.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'Ahmed Khallaf',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                    const SizedBox(height: 24),
+                    Expanded(
+                      child: NavigationRail(
+                        selectedIndex: selectedIndex,
+                        onDestinationSelected:
+                            (idx) => setState(() => selectedIndex = idx),
+                        labelType: NavigationRailLabelType.none,
+                        backgroundColor:
+                            Theme.of(
+                              context,
+                            ).navigationRailTheme.backgroundColor,
+                        destinations: const [
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Home',
+                              child: Icon(Icons.home),
+                            ),
+                            label: Text('Home'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'About Me',
+                              child: Icon(Icons.person),
+                            ),
+                            label: Text('About Me'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Projects',
+                              child: Icon(Icons.apps),
+                            ),
+                            label: Text('Projects'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Experience',
+                              child: Icon(Icons.timeline),
+                            ),
+                            label: Text('Experience'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Education',
+                              child: Icon(Icons.school),
+                            ),
+                            label: Text('Education'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Certificates',
+                              child: Icon(Icons.workspace_premium),
+                            ),
+                            label: Text('Certificates'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Contact',
+                              child: Icon(Icons.mail),
+                            ),
+                            label: Text('Contact'),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
-              _DrawerIconButton(
-                icon: Icons.home,
-                tooltip: 'Home',
-                selected: selectedIndex == 0,
-                onTap: () => _onMobileNavTap(0),
-              ),
-              _DrawerIconButton(
-                icon: Icons.person,
-                tooltip: 'About Me',
-                selected: selectedIndex == 1,
-                onTap: () => _onMobileNavTap(1),
-              ),
-              _DrawerIconButton(
-                icon: Icons.apps,
-                tooltip: 'Projects',
-                selected: selectedIndex == 2,
-                onTap: () => _onMobileNavTap(2),
-              ),
-              _DrawerIconButton(
-                icon: Icons.timeline,
-                tooltip: 'Experience',
-                selected: selectedIndex == 3,
-                onTap: () => _onMobileNavTap(3),
-              ),
-              _DrawerIconButton(
-                icon: Icons.school,
-                tooltip: 'Education',
-                selected: selectedIndex == 4,
-                onTap: () => _onMobileNavTap(4),
-              ),
-              _DrawerIconButton(
-                icon: Icons.workspace_premium,
-                tooltip: 'Certificates',
-                selected: selectedIndex == 5,
-                onTap: () => _onMobileNavTap(5),
-              ),
-              _DrawerIconButton(
-                icon: Icons.mail,
-                tooltip: 'Contact',
-                selected: selectedIndex == 6,
-                onTap: () => _onMobileNavTap(6),
+              Expanded(
+                child: Scaffold(
+                  appBar: appBar,
+                  body: _getPage(selectedIndex, context, 600, 220),
+                ),
               ),
             ],
           ),
-        ),
-      ),
+          tablet: Row(
+            children: [
+              Container(
+                width: 80,
+                color: Theme.of(context).navigationRailTheme.backgroundColor,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 32),
+                    Material(
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 32,
+                            backgroundImage: NetworkImage(profile.avatarUrl),
+                            onBackgroundImageError: (_, __) {},
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            profile.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Expanded(
+                      child: NavigationRail(
+                        selectedIndex: selectedIndex,
+                        onDestinationSelected:
+                            (idx) => setState(() => selectedIndex = idx),
+                        labelType: NavigationRailLabelType.none,
+                        backgroundColor:
+                            Theme.of(
+                              context,
+                            ).navigationRailTheme.backgroundColor,
+                        destinations: const [
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Home',
+                              child: Icon(Icons.home),
+                            ),
+                            label: Text('Home'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'About Me',
+                              child: Icon(Icons.person),
+                            ),
+                            label: Text('About Me'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Projects',
+                              child: Icon(Icons.apps),
+                            ),
+                            label: Text('Projects'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Experience',
+                              child: Icon(Icons.timeline),
+                            ),
+                            label: Text('Experience'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Education',
+                              child: Icon(Icons.school),
+                            ),
+                            label: Text('Education'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Certificates',
+                              child: Icon(Icons.workspace_premium),
+                            ),
+                            label: Text('Certificates'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Contact',
+                              child: Icon(Icons.mail),
+                            ),
+                            label: Text('Contact'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Scaffold(
+                  appBar: appBar,
+                  body: _getPage(selectedIndex, context, 500, 180),
+                ),
+              ),
+            ],
+          ),
+          mobile: Scaffold(
+            appBar: AppBar(
+              title: Text(_currentTitle),
+              centerTitle: true,
+              automaticallyImplyLeading: true,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.brightness_6),
+                  onPressed: widget.onToggleTheme,
+                ),
+              ],
+            ),
+            body: _getPage(selectedIndex, context, double.infinity, 120),
+            drawer: Drawer(
+              child: Column(
+                children: [
+                  const SizedBox(height: 32),
+                  Material(
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 44,
+                          backgroundImage: NetworkImage(profile.avatarUrl),
+                          onBackgroundImageError: (_, __) {},
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          profile.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  _DrawerIconButton(
+                    icon: Icons.home,
+                    tooltip: 'Home',
+                    selected: selectedIndex == 0,
+                    onTap: () => _onMobileNavTap(0),
+                  ),
+                  _DrawerIconButton(
+                    icon: Icons.person,
+                    tooltip: 'About Me',
+                    selected: selectedIndex == 1,
+                    onTap: () => _onMobileNavTap(1),
+                  ),
+                  _DrawerIconButton(
+                    icon: Icons.apps,
+                    tooltip: 'Projects',
+                    selected: selectedIndex == 2,
+                    onTap: () => _onMobileNavTap(2),
+                  ),
+                  _DrawerIconButton(
+                    icon: Icons.timeline,
+                    tooltip: 'Experience',
+                    selected: selectedIndex == 3,
+                    onTap: () => _onMobileNavTap(3),
+                  ),
+                  _DrawerIconButton(
+                    icon: Icons.school,
+                    tooltip: 'Education',
+                    selected: selectedIndex == 4,
+                    onTap: () => _onMobileNavTap(4),
+                  ),
+                  _DrawerIconButton(
+                    icon: Icons.workspace_premium,
+                    tooltip: 'Certificates',
+                    selected: selectedIndex == 5,
+                    onTap: () => _onMobileNavTap(5),
+                  ),
+                  _DrawerIconButton(
+                    icon: Icons.mail,
+                    tooltip: 'Contact',
+                    selected: selectedIndex == 6,
+                    onTap: () => _onMobileNavTap(6),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -579,16 +580,12 @@ class _DrawerIconButton extends StatelessWidget {
       child: Material(
         color:
             selected
-                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
                 : Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          splashColor: Theme.of(
-            context,
-          ).colorScheme.primary.withValues(alpha: 0.2),
-          hoverColor: Theme.of(
-            context,
-          ).colorScheme.primary.withValues(alpha: 0.08),
+          splashColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+          hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.08),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
@@ -666,9 +663,7 @@ class _AnimatedShimmerButtonState extends State<_AnimatedShimmerButton>
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.4),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
                 blurRadius: _shadowAnim.value,
                 spreadRadius: 1,
               ),
@@ -677,13 +672,13 @@ class _AnimatedShimmerButtonState extends State<_AnimatedShimmerButton>
           ),
           child: ShaderMask(
             shaderCallback: (Rect bounds) {
-              return material.LinearGradient(
+              return LinearGradient(
                 colors: [
-                  Colors.white.withValues(alpha: 0.7),
-                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
-                  Colors.white.withValues(alpha: 0.7),
+                  Colors.white.withOpacity(0.7),
+                  Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                  Colors.white.withOpacity(0.7),
                 ],
-                stops: [0.0, 0.5, 1.0],
+                stops: const [0.0, 0.5, 1.0],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 tileMode: TileMode.mirror,

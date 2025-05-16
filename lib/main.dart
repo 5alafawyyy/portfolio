@@ -11,7 +11,9 @@ import 'ui/pages/experience_page.dart';
 import 'ui/pages/contact_page.dart';
 import 'ui/pages/education_page.dart';
 import 'ui/pages/certificates_page.dart';
+import 'ui/pages/migration_page.dart';
 import 'utils/web_env.dart' if (dart.library.io) 'utils/empty_env.dart';
+import 'data/supabase/migrate_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,9 @@ void main() async {
             ? getEnv('SUPABASE_ANON_KEY')
             : const String.fromEnvironment('SUPABASE_ANON_KEY'),
   );
+
+  // Uncomment the following line to migrate data (run only once)
+  // await DataMigration().migrateAllData();
 
   runApp(BlocProvider(create: (_) => ThemeBloc(), child: const PortfolioApp()));
 }
@@ -54,6 +59,7 @@ class PortfolioApp extends StatelessWidget {
             '/contact': (context) => const ContactPage(),
             '/education': (context) => const EducationPage(),
             '/certificates': (context) => const CertificatesPage(),
+            '/migration': (context) => const MigrationPage(),
           },
         );
       },
