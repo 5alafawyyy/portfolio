@@ -11,8 +11,6 @@ import 'contact_page.dart';
 import 'education_page.dart';
 import 'certificates_page.dart';
 import 'package:rive/rive.dart' as rive;
-import 'package:flutter/material.dart' as material;
-import 'package:flutter/foundation.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback onToggleTheme;
@@ -85,9 +83,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     width: avatarSize,
                     height: avatarSize,
-                    child: rive.RiveAnimation.asset(
-                      'assets/animations/intro.riv',
-                    ),
+                    child: rive.RiveAnimation.network(profile.intro),
                   ),
                   const SizedBox(height: 32),
                   AnimatedOpacity(
@@ -205,7 +201,7 @@ class _HomePageState extends State<HomePage> {
           await launchUrl(uri);
         }
       },
-      hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+      hoverColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
       splashRadius: 24,
     );
   }
@@ -275,6 +271,8 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     const SizedBox(height: 32),
                     Material(
+                      color:
+                          Theme.of(context).navigationRailTheme.backgroundColor,
                       child: Column(
                         children: [
                           CircleAvatar(
@@ -580,12 +578,16 @@ class _DrawerIconButton extends StatelessWidget {
       child: Material(
         color:
             selected
-                ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
                 : Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          splashColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-          hoverColor: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+          splashColor: Theme.of(
+            context,
+          ).colorScheme.primary.withValues(alpha: 0.2),
+          hoverColor: Theme.of(
+            context,
+          ).colorScheme.primary.withValues(alpha: 0.08),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
@@ -663,7 +665,9 @@ class _AnimatedShimmerButtonState extends State<_AnimatedShimmerButton>
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.4),
                 blurRadius: _shadowAnim.value,
                 spreadRadius: 1,
               ),
@@ -674,9 +678,9 @@ class _AnimatedShimmerButtonState extends State<_AnimatedShimmerButton>
             shaderCallback: (Rect bounds) {
               return LinearGradient(
                 colors: [
-                  Colors.white.withOpacity(0.7),
-                  Theme.of(context).colorScheme.primary.withOpacity(0.7),
-                  Colors.white.withOpacity(0.7),
+                  Colors.white.withValues(alpha: 0.7),
+                  Theme.of(context).primaryColor.withValues(alpha: 0.7),
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
                 ],
                 stops: const [0.0, 0.5, 1.0],
                 begin: Alignment.topLeft,
@@ -699,7 +703,7 @@ class _AnimatedShimmerButtonState extends State<_AnimatedShimmerButton>
                   fontWeight: FontWeight.bold,
                 ),
                 backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Colors.white,
+                foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

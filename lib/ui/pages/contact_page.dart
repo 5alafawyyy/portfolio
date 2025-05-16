@@ -122,19 +122,12 @@ class ContactPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          // gradient: LinearGradient(
-          //   colors: [Color(0xFFF5EFE7), Color(0xFFE6DCC2), Color(0xFFD6C89C)],
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          // ),
-        ),
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
@@ -149,7 +142,12 @@ class ContactPage extends StatelessWidget {
                         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.75),
+                            color:
+                                theme.brightness == Brightness.dark
+                                    ? theme.colorScheme.surface.withValues(
+                                      alpha: 0.75,
+                                    )
+                                    : Colors.white.withValues(alpha: 0.75),
                             borderRadius: BorderRadius.circular(28),
                             boxShadow: [
                               BoxShadow(
@@ -188,8 +186,13 @@ class ContactPage extends StatelessWidget {
                                       Center(
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: AppTheme.mochaMousse
-                                                .withValues(alpha: 0.13),
+                                            color:
+                                                theme.brightness ==
+                                                        Brightness.dark
+                                                    ? AppTheme.mochaMousse
+                                                        .withValues(alpha: 0.13)
+                                                    : AppTheme
+                                                        .formIconBackground,
                                             shape: BoxShape.circle,
                                           ),
                                           padding: const EdgeInsets.all(20),
@@ -203,24 +206,10 @@ class ContactPage extends StatelessWidget {
                                       const SizedBox(height: 28),
                                       TextFormField(
                                         initialValue: state.name,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           labelText: 'Name',
-                                          prefixIcon: const Icon(
+                                          prefixIcon: Icon(
                                             Icons.person_outline,
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: AppTheme.mochaMousse,
-                                              width: 2,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              14,
-                                            ),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              14,
-                                            ),
                                           ),
                                         ),
                                         onChanged:
@@ -236,24 +225,10 @@ class ContactPage extends StatelessWidget {
                                       const SizedBox(height: 18),
                                       TextFormField(
                                         initialValue: state.email,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           labelText: 'Email',
-                                          prefixIcon: const Icon(
+                                          prefixIcon: Icon(
                                             Icons.email_outlined,
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: AppTheme.mochaMousse,
-                                              width: 2,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              14,
-                                            ),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              14,
-                                            ),
                                           ),
                                         ),
                                         onChanged:
@@ -269,25 +244,9 @@ class ContactPage extends StatelessWidget {
                                       const SizedBox(height: 18),
                                       TextFormField(
                                         initialValue: state.message,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           labelText: 'Message',
-                                          prefixIcon: const Icon(
-                                            Icons.edit_outlined,
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: AppTheme.mochaMousse,
-                                              width: 2,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              14,
-                                            ),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              14,
-                                            ),
-                                          ),
+                                          prefixIcon: Icon(Icons.edit_outlined),
                                         ),
                                         minLines: 4,
                                         maxLines: 8,

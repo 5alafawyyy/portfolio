@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/data_sources/certificates_data.dart';
 import '../../data/models/certificate_model.dart';
-import '../widgets/responsive_layout.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,47 +49,55 @@ class _CertificatesPageState extends State<CertificatesPage> {
           itemCount: certificates.length,
           itemBuilder: (context, index) {
             final certificate = certificates[index];
-            return Card(
-                  margin: const EdgeInsets.only(bottom: 24),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(24),
-                    leading: Icon(
-                      Icons.workspace_premium,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 32,
-                    ),
-                    title: Text(
-                      certificate.title,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
+            return InkWell(
+              onTap: () async {
+                final uri = Uri.parse(certificate.url!);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri);
+                }
+              },
+              child: Card(
+                    margin: const EdgeInsets.only(bottom: 24),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(24),
+                      leading: Icon(
+                        Icons.workspace_premium,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 32,
                       ),
+                      title: Text(
+                        certificate.title,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text(
+                        certificate.issuer,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      trailing:
+                          certificate.url != null
+                              ? IconButton(
+                                icon: const Icon(Icons.link),
+                                onPressed: () async {
+                                  final uri = Uri.parse(certificate.url!);
+                                  if (await canLaunchUrl(uri)) {
+                                    await launchUrl(uri);
+                                  }
+                                },
+                              )
+                              : null,
                     ),
-                    subtitle: Text(
-                      certificate.issuer,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    trailing:
-                        certificate.url != null
-                            ? IconButton(
-                              icon: const Icon(Icons.link),
-                              onPressed: () async {
-                                final uri = Uri.parse(certificate.url!);
-                                if (await canLaunchUrl(uri)) {
-                                  await launchUrl(uri);
-                                }
-                              },
-                            )
-                            : null,
+                  )
+                  .animate()
+                  .fadeIn(duration: 600.ms, delay: (100 * index).ms)
+                  .slideX(
+                    begin: 0.2,
+                    end: 0,
+                    duration: 600.ms,
+                    delay: (100 * index).ms,
                   ),
-                )
-                .animate()
-                .fadeIn(duration: 600.ms, delay: (100 * index).ms)
-                .slideX(
-                  begin: 0.2,
-                  end: 0,
-                  duration: 600.ms,
-                  delay: (100 * index).ms,
-                );
+            );
           },
         );
       },

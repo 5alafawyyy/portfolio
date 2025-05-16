@@ -8,6 +8,7 @@ class Profile {
   final String whatsapp;
   final String cvUrl;
   final String avatarUrl;
+  final String intro;
 
   Profile({
     required this.name,
@@ -19,6 +20,7 @@ class Profile {
     required this.whatsapp,
     required this.cvUrl,
     required this.avatarUrl,
+    required this.intro,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class Profile {
       whatsapp: json['whatsapp'],
       cvUrl: json['cv_url'],
       avatarUrl: json['avatar_url'],
+      intro: json['intro'],
     );
   }
 }

@@ -10,6 +10,11 @@ class AppTheme {
     0xFF8D7960,
   ); // Neutral brown/grey for unselected
 
+  // Form specific colors
+  static const Color formBackground = Color(0xFFF5EFE7);
+  static const Color formBorder = Color(0xFFE6DCC2);
+  static const Color formIconBackground = Color(0xFFF0E8D9);
+
   static ThemeData get light => ThemeData(
     brightness: Brightness.light,
     primaryColor: mochaMousse,
@@ -33,6 +38,32 @@ class AppTheme {
       primary: mochaMousse,
       secondary: mochaMousse,
     ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: formBackground,
+      prefixIconColor: mochaMousse,
+      labelStyle: GoogleFonts.poppins(color: mochaMousse),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: formBorder),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: formBorder),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: mochaMousse, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Colors.red.shade300),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Colors.red.shade400, width: 2),
+      ),
+    ),
     navigationRailTheme: NavigationRailThemeData(
       backgroundColor: Colors.white,
       selectedIconTheme: IconThemeData(color: mochaMousse),
@@ -44,7 +75,9 @@ class AppTheme {
       indicatorColor: mochaMousse.withValues(alpha: 0.12),
     ),
     iconTheme: IconThemeData(color: neutralIcon),
-    textTheme: GoogleFonts.poppinsTextTheme(),
+    textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+      titleLarge: GoogleFonts.poppins(color: Colors.white),
+    ),
   );
 
   static ThemeData get dark => ThemeData(
@@ -61,6 +94,32 @@ class AppTheme {
       titleTextStyle: GoogleFonts.poppins(
         color: mochaMousse,
         fontWeight: FontWeight.bold,
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: darkSurface,
+      prefixIconColor: mochaMousse,
+      labelStyle: GoogleFonts.poppins(color: darkOnBackground),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: mochaMousse.withValues(alpha: 0.3)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: mochaMousse.withValues(alpha: 0.3)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: mochaMousse, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Colors.red.shade300),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Colors.red.shade400, width: 2),
       ),
     ),
     // ignore: deprecated_member_use
@@ -98,7 +157,7 @@ class AppTheme {
         bodyColor: darkOnBackground,
         displayColor: darkOnBackground,
       ),
-    ),
+    ).copyWith(titleLarge: GoogleFonts.poppins(color: darkSurface)),
     appBarTheme: AppBarTheme(
       backgroundColor: darkSurface,
       foregroundColor: darkOnBackground,
