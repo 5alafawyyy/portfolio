@@ -3,6 +3,7 @@ import '../../data/data_sources/education_data.dart';
 import '../../data/models/education_model.dart';
 import '../widgets/responsive_layout.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../widgets/shimmer_loading.dart';
 
 class EducationPage extends StatefulWidget {
   const EducationPage({super.key});
@@ -21,13 +22,41 @@ class _EducationPageState extends State<EducationPage> {
     _educationFuture = _dataSource.getEducation();
   }
 
+  Widget _buildShimmerList(double width) {
+    return Center(
+      child: SizedBox(
+        width: width,
+        child: ListView.separated(
+          padding: const EdgeInsets.all(24),
+          itemCount: 3,
+          separatorBuilder: (context, i) => const SizedBox(height: 24),
+          itemBuilder: (context, index) {
+            return const ShimmerEducationCard()
+                .animate()
+                .fadeIn(duration: 600.ms, delay: (120 * index).ms)
+                .slideY(
+                  begin: 0.1,
+                  end: 0,
+                  duration: 600.ms,
+                  delay: (120 * index).ms,
+                );
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Education>>(
       future: _educationFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return ResponsiveLayout(
+            desktop: _buildShimmerList(700),
+            tablet: _buildShimmerList(500),
+            mobile: _buildShimmerList(double.infinity),
+          );
         }
 
         if (snapshot.hasError) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../data/data_sources/experience_data.dart';
 import '../../data/models/experience_model.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../widgets/shimmer_loading.dart';
 
 class ExperiencePage extends StatefulWidget {
   const ExperiencePage({super.key});
@@ -20,13 +21,31 @@ class _ExperiencePageState extends State<ExperiencePage> {
     _experienceFuture = _dataSource.getExperience();
   }
 
+  Widget _buildShimmerList() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(24),
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return const ShimmerExperienceCard()
+            .animate()
+            .fadeIn(duration: 600.ms, delay: (100 * index).ms)
+            .slideX(
+              begin: 0.2,
+              end: 0,
+              duration: 600.ms,
+              delay: (100 * index).ms,
+            );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Experience>>(
       future: _experienceFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return _buildShimmerList();
         }
 
         if (snapshot.hasError) {

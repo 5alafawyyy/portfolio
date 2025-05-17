@@ -3,6 +3,7 @@ import '../../data/data_sources/certificates_data.dart';
 import '../../data/models/certificate_model.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../widgets/shimmer_loading.dart';
 
 class CertificatesPage extends StatefulWidget {
   const CertificatesPage({super.key});
@@ -21,13 +22,31 @@ class _CertificatesPageState extends State<CertificatesPage> {
     _certificatesFuture = _dataSource.getCertificates();
   }
 
+  Widget _buildShimmerList() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(24),
+      itemCount: 4,
+      itemBuilder: (context, index) {
+        return const ShimmerCertificateCard()
+            .animate()
+            .fadeIn(duration: 600.ms, delay: (100 * index).ms)
+            .slideX(
+              begin: 0.2,
+              end: 0,
+              duration: 600.ms,
+              delay: (100 * index).ms,
+            );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Certificate>>(
       future: _certificatesFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return _buildShimmerList();
         }
 
         if (snapshot.hasError) {

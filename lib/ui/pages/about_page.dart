@@ -3,6 +3,7 @@ import '../widgets/responsive_layout.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../data/supabase/supabase_service.dart';
 import '../../data/models/about_model.dart';
+import '../widgets/shimmer_loading.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -18,6 +19,45 @@ class AboutPage extends StatelessWidget {
     );
   }
 
+  Widget _buildShimmerContent() {
+    return ListView(
+      padding: const EdgeInsets.all(24),
+      children: [
+        const ShimmerLoading(width: 200, height: 32),
+        const SizedBox(height: 8),
+        ...List.generate(
+          6,
+          (index) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: ShimmerLoading(width: double.infinity, height: 16),
+          ),
+        ),
+        const SizedBox(height: 24),
+        const ShimmerLoading(width: 150, height: 32),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: List.generate(
+            10,
+            (index) => ShimmerLoading(width: 100, height: 32, borderRadius: 16),
+          ),
+        ),
+        const SizedBox(height: 24),
+        const ShimmerLoading(width: 150, height: 32),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: List.generate(
+            15,
+            (index) => ShimmerLoading(width: 120, height: 32, borderRadius: 16),
+          ),
+        ),
+      ],
+    ).animate().fadeIn(duration: 600.ms);
+  }
+
   Widget _mainContent(BuildContext context, {double width = 500}) {
     final supabaseService = SupabaseService();
 
@@ -28,7 +68,7 @@ class AboutPage extends StatelessWidget {
           future: supabaseService.getAllAboutSections(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return _buildShimmerContent();
             }
 
             if (snapshot.hasError) {

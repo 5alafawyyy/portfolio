@@ -11,6 +11,7 @@ import 'contact_page.dart';
 import 'education_page.dart';
 import 'certificates_page.dart';
 import 'package:rive/rive.dart' as rive;
+import '../widgets/shimmer_loading.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback onToggleTheme;
@@ -57,7 +58,15 @@ class _HomePageState extends State<HomePage> {
       future: _profileFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: SizedBox(
+              width: width,
+              child: const ShimmerProfileCard()
+                  .animate()
+                  .fadeIn(duration: 600.ms)
+                  .slideY(begin: 0.1, end: 0, duration: 600.ms),
+            ),
+          );
         }
 
         if (snapshot.hasError) {
@@ -248,7 +257,15 @@ class _HomePageState extends State<HomePage> {
       future: _profileFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: SizedBox(
+              width: 600,
+              child: const ShimmerProfileCard()
+                  .animate()
+                  .fadeIn(duration: 600.ms)
+                  .slideY(begin: 0.1, end: 0, duration: 600.ms),
+            ),
+          );
         }
 
         if (snapshot.hasError) {
