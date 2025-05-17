@@ -25,7 +25,7 @@ class ShimmerLoading extends StatelessWidget {
               : Colors.grey[300]!,
       highlightColor:
           Theme.of(context).brightness == Brightness.dark
-              ? AppTheme.darkSurface.withValues(alpha:0.5)
+              ? AppTheme.darkSurface.withValues(alpha: 0.5)
               : Colors.grey[100]!,
       child: Container(
         width: width,
