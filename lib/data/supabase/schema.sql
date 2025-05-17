@@ -52,9 +52,18 @@ CREATE TABLE IF NOT EXISTS certificates (
     id BIGSERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     issuer TEXT NOT NULL,
-    url TEXT,
+    url TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS about (
+    id BIGSERIAL PRIMARY KEY,
+    section TEXT NOT NULL,
+    content TEXT NOT NULL,
+    skills TEXT[],
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    UNIQUE(section)
 );
 
 -- Create storage buckets for images
@@ -82,6 +91,7 @@ ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE experience ENABLE ROW LEVEL SECURITY;
 ALTER TABLE education ENABLE ROW LEVEL SECURITY;
 ALTER TABLE certificates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE about ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for public access
 DO $$ 
@@ -104,5 +114,9 @@ BEGIN
     
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'certificates' AND policyname = 'Public Access') THEN
         CREATE POLICY "Public Access" ON certificates FOR SELECT USING (true);
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'about' AND policyname = 'Public Access') THEN
+        CREATE POLICY "Public Access" ON about FOR SELECT USING (true);
     END IF;
 END $$; 

@@ -13,7 +13,7 @@ import 'ui/pages/education_page.dart';
 import 'ui/pages/certificates_page.dart';
 import 'ui/pages/migration_page.dart';
 import 'utils/web_env.dart' if (dart.library.io) 'utils/empty_env.dart';
-import 'data/supabase/migrate_data.dart';
+// import 'data/supabase/migrate_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

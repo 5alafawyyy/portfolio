@@ -4,6 +4,7 @@ import '../models/project_model.dart';
 import '../models/experience_model.dart';
 import '../models/education_model.dart';
 import '../models/certificate_model.dart';
+import '../models/about_model.dart';
 
 class SupabaseService {
   final SupabaseClient _client = Supabase.instance.client;
@@ -139,5 +140,35 @@ class SupabaseService {
 
   String getProjectScreenshotUrl(String path) {
     return _client.storage.from('project_screenshots').getPublicUrl(path);
+  }
+
+  // About
+  Future<About> getAboutSection(String section) async {
+    try {
+      final response =
+          await _client.from('about').select().eq('section', section).single();
+
+      return About.fromJson(response);
+    } catch (e) {
+      print('Error fetching about section: $e');
+      rethrow;
+    }
+  }
+
+  Future<Map<String, About>> getAllAboutSections() async {
+    try {
+      final response = await _client
+          .from('about')
+          .select()
+          .order('created_at', ascending: false);
+
+      final sections =
+          (response as List).map((json) => About.fromJson(json)).toList();
+
+      return {for (var section in sections) section.section: section};
+    } catch (e) {
+      print('Error fetching all about sections: $e');
+      rethrow;
+    }
   }
 }
