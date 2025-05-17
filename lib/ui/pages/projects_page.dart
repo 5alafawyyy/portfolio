@@ -88,7 +88,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
       padding: const EdgeInsets.all(24),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
-        childAspectRatio: 0.8,
+        childAspectRatio: 0.7,
         crossAxisSpacing: 24,
         mainAxisSpacing: 24,
       ),

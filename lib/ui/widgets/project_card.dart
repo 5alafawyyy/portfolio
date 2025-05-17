@@ -18,7 +18,7 @@ class _ProjectCardState extends State<ProjectCard> {
   Widget build(BuildContext context) {
     final project = widget.project;
     final double expandedHeight =
-        MediaQuery.of(context).size.width < 600 ? 320 : 420;
+        MediaQuery.of(context).size.width < 600 ? 380 : 560;
 
     return GestureDetector(
       onTap: () => setState(() => isExpanded = !isExpanded),
@@ -32,67 +32,87 @@ class _ProjectCardState extends State<ProjectCard> {
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
             duration: const Duration(milliseconds: 350),
-            firstChild: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(project.iconUrl),
-                    radius: 32,
-                    onBackgroundImageError: (_, __) {},
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    project.name,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+            firstChild: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24,
+                  horizontal: 12,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(project.iconUrl),
+                      radius: 32,
+                      onBackgroundImageError: (_, __) {},
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    project.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    children:
-                        project.tech
-                            .map<Widget>((t) => Chip(label: Text(t)))
-                            .toList(),
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    children:
-                        project.links.entries
-                            .map<Widget>(
-                              (entry) => IconButton(
-                                icon: _getLinkIcon(entry.key),
-                                tooltip: entry.key,
-                                onPressed: () async {
-                                  final uri = Uri.parse(entry.value);
-                                  if (uri.toString().isNotEmpty &&
-                                      await canLaunchUrl(uri)) {
-                                    await launchUrl(uri);
-                                  }
-                                },
-                              ),
-                            )
-                            .toList(),
-                  ),
-                  const SizedBox(height: 8),
-                  Icon(
-                    isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ],
+                    const SizedBox(height: 12),
+                    Text(
+                      project.name,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      project.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      children:
+                          project.tech
+                              .map<Widget>(
+                                (t) => Container(
+                                  margin: const EdgeInsets.only(
+                                    top: 4,
+                                    bottom: 4,
+                                  ),
+                                  child: Chip(
+                                    label: Text(
+                                      t,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      children:
+                          project.links.entries
+                              .map<Widget>(
+                                (entry) => IconButton(
+                                  icon: _getLinkIcon(entry.key),
+                                  tooltip: entry.key,
+                                  onPressed: () async {
+                                    final uri = Uri.parse(entry.value);
+                                    if (uri.toString().isNotEmpty &&
+                                        await canLaunchUrl(uri)) {
+                                      await launchUrl(uri);
+                                    }
+                                  },
+                                ),
+                              )
+                              .toList(),
+                    ),
+                    const SizedBox(height: 8),
+                    Icon(
+                      isExpanded ? Icons.expand_less : Icons.expand_more,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ],
+                ),
               ),
             ),
             secondChild: SizedBox(
@@ -131,10 +151,10 @@ class _ProjectCardState extends State<ProjectCard> {
                       const SizedBox(height: 12),
                       if (project.screenshots.isNotEmpty)
                         SizedBox(
-                          height: 180,
+                          height: 400,
                           child: CarouselSlider(
                             options: CarouselOptions(
-                              height: 180,
+                              height: 400,
                               enlargeCenterPage: true,
                               enableInfiniteScroll: false,
                               viewportFraction: 1.0,
@@ -145,9 +165,9 @@ class _ProjectCardState extends State<ProjectCard> {
                                     borderRadius: BorderRadius.circular(12),
                                     child: Image.network(
                                       img,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.fitHeight,
                                       width: double.infinity,
-                                      height: 180,
+                                      height: 300,
                                       errorBuilder:
                                           (context, error, stackTrace) =>
                                               const Icon(Icons.error),
@@ -161,7 +181,23 @@ class _ProjectCardState extends State<ProjectCard> {
                         spacing: 8,
                         children:
                             project.tech
-                                .map<Widget>((t) => Chip(label: Text(t)))
+                                .map<Widget>(
+                                  (t) => Container(
+                                    margin: const EdgeInsets.only(
+                                      top: 4,
+                                      bottom: 4,
+                                    ),
+                                    child: Chip(
+                                      label: Text(
+                                        t,
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.bodySmall,
+                                      ),
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                       ),
                       const SizedBox(height: 8),
@@ -217,4 +253,3 @@ class _ProjectCardState extends State<ProjectCard> {
     }
   }
 }
- 
